@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Tsg_Trial>
+            <version>0.0.1</version>
+        </Tsg_Trial>
+    </modules>
+    <frontend>
+        <routers>
+            <Tsg_Trial_Router>
+                <use>standard</use>
+                <args>
+                    <module>Tsg_Trial</module>
+                    <frontName>trial</frontName>
+                </args>
+            </Tsg_Trial_Router>
+        </routers>
+    </frontend>
+</config>

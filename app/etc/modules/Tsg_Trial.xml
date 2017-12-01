@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Tsg_Trial>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Tsg_Trial>
+    </modules>
+</config>
