@@ -5,6 +5,13 @@
             <version>0.0.1</version>
         </Tsg_Trial>
     </modules>
+    <global>
+        <blocks>
+            <tsg_trial>
+                <class>Tsg_Trial_Block</class>
+            </tsg_trial>
+        </blocks>
+    </global>
     <frontend>
         <routers>
             <Tsg_Trial_Router>
@@ -15,5 +22,12 @@
                 </args>
             </Tsg_Trial_Router>
         </routers>
+        <layout>
+            <updates>
+                <tsg_trial>
+                    <file>trial.xml</file>
+                </tsg_trial>
+            </updates>
+        </layout>
     </frontend>
 </config>

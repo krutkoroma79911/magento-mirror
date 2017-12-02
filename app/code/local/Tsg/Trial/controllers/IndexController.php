@@ -11,6 +11,19 @@ class Tsg_Trial_IndexController
 {
     public function indexAction()
     {
-        echo "Hello Magento";
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    public function advertisingAction()
+    {
+        $this->loadLayout();
+        $block = $this->getLayout()->createBlock(
+            'Tsg_Trial_Block_Advertising',
+            'advertising',
+            array('template' => 'trial/advertising.phtml')
+        );
+        $this->getLayout()->getBlock('content')->append($block);
+        $this->renderLayout();
     }
 }
