@@ -5,29 +5,29 @@
             <version>0.0.1</version>
         </Tsg_Trial>
     </modules>
-    <global>
-        <blocks>
-            <tsg_trial>
-                <class>Tsg_Trial_Block</class>
-            </tsg_trial>
-        </blocks>
-    </global>
     <frontend>
         <routers>
-            <Tsg_Trial_Router>
+            <trial>
                 <use>standard</use>
                 <args>
                     <module>Tsg_Trial</module>
                     <frontName>trial</frontName>
                 </args>
-            </Tsg_Trial_Router>
+            </trial>
         </routers>
         <layout>
             <updates>
-                <tsg_trial>
+                <trial>
                     <file>trial.xml</file>
-                </tsg_trial>
+                </trial>
             </updates>
         </layout>
     </frontend>
+    <global>
+        <blocks>
+            <trial>
+                <class>Tsg_Trial_Block</class>
+            </trial>
+        </blocks>
+    </global>
 </config>

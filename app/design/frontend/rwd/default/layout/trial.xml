@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <trial_advetising>
+    <trial_index_advertising>
         <reference name="content">
-            <block type="trial/advertising" name="advertising" template="trial/advertising.phtml"> </block>
+            <block type="trial/advertising" name="trial" template="trial/advertising.phtml"/>
         </reference>
-    </trial_advetising>
+    </trial_index_advertising>
 
 </layout>
