@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <trial_advetising>
+        <reference name="content">
+            <block type="trial/advertising" name="advertising" template="trial/advertising.phtml"> </block>
+        </reference>
+    </trial_advetising>
+
+</layout>
