@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Krut
- * Date: 01.12.2017
- * Time: 21:42
- */
+
 /**
  * @var Tsg_Trial_Block_Advertising $this
  */
 $product = $this->getProduct();
 $sku = $product->getSku();
-if( $sku ==='advertising'){
+if ($sku ==='advertising'){
     echo $this->getAdvertising();
 }
 ?>
