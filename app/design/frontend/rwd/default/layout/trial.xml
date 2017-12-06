@@ -2,13 +2,23 @@
 <layout version="0.1.0">
     <trial_index_advertising>
         <reference name="content">
-            <block type="trial/advertising" name="trial" template="trial/advertising.phtml"/>
+            <block type="tsg_trial/advertising" name="trial" template="trial/advertising.phtml"/>
         </reference>
     </trial_index_advertising>
     <catalog_product_view translate="label">
         <reference name="content">
-            <block type="trial/advertising" name="trial" template="trial/advertising.phtml"/>
+            <block type="tsg_trial/advertising" name="trial" template="trial/advertising.phtml"/>
         </reference>
     </catalog_product_view>
+    <trial_index_newslist>
+        <reference name="content">
+            <block type="tsg_trial/news" name="trial" template="trial/news.phtml"/>
+        </reference>
+    </trial_index_newslist>
+    <trial_index_newsview>
+        <reference name="content">
+            <block type="tsg_trial/view" name="trial" template="trial/view.phtml"/>
+        </reference>
+    </trial_index_newsview>
 
 </layout>

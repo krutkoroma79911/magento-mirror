@@ -1,0 +1,15 @@
+<div>
+    <?php
+    $news = $this->loadNewsById($this->getRequest()->getParam('view'));
+    if ($news->getImage()) {
+        $out = '<img src = "' . Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS .
+            $news->getImage() . '" width="250" height="250" class="news-img"/>';
+    }
+    ?>
+    <div>
+        <h3 align="center"><?php echo $news->getTitle(); ?></h3>
+        <p><?php echo $out; ?>
+            <span><?php echo $news->getContent(); ?></span>
+        </p>
+    </div>
+</div>

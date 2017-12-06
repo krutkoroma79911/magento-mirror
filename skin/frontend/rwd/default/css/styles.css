@@ -10601,3 +10601,11 @@ div.calendar table td.button {
   color: inherit;
   text-transform: none;
 }
+
+.news-img {
+  float:left;
+  margin: 7px 7px 7px 0;
+}
+.clear-fix {
+  clear: left;
+}

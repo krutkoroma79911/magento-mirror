@@ -1,0 +1,12 @@
+<div>
+    <?php
+    $news = $this->getNews();
+    foreach ($news as $item) { ?>
+        <div class="clear-fix">
+            <h3 align="center"><?php echo $item->getTitle(); ?></h3>
+            <p><?php if($item->getImage()) echo $this->newsImage($item->getImage()); ?>
+                <span><?php echo $this->newsContent($item->getContent(), $item->getId()); ?></span>
+            </p>
+        </div>
+    <?php } ?>
+</div>

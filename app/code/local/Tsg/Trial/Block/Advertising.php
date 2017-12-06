@@ -15,8 +15,7 @@ class Tsg_Trial_Block_Advertising
      */
     public function getProduct()
     {
-        if (null === $this->product)
-        {
+        if (null === $this->product) {
             $this->product = Mage::registry('current_product');
         }
 
@@ -28,6 +27,7 @@ class Tsg_Trial_Block_Advertising
      */
     public function getAdvertising()
     {
-       return "Здесь могла бы быть ваша реклама";
+        return "Здесь могла бы быть ваша реклама";
     }
+
 }

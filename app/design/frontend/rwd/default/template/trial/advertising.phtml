@@ -4,9 +4,8 @@
  * @var Tsg_Trial_Block_Advertising $this
  */
 $product = $this->getProduct();
-$sku = $product->getSku();
-if ($sku ==='advertising')
-{
+$sku = $product ? $product->getSku() : null;
+if ($sku === 'advertising' || $sku == null) {
     echo $this->getAdvertising();
 }
 ?>

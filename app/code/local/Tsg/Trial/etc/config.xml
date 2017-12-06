@@ -5,6 +5,17 @@
             <version>0.0.1</version>
         </Tsg_Trial>
     </modules>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Tsg_Trial before="Mage_Adminhtml">Tsg_Trial_Adminhtml</Tsg_Trial>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
     <frontend>
         <routers>
             <trial>
@@ -24,10 +35,37 @@
         </layout>
     </frontend>
     <global>
+        <helpers>
+            <tsg_trial>
+                <class>Tsg_Trial_Helper</class>
+            </tsg_trial>
+        </helpers>
+        <models>
+            <tsg_trial>
+                <class>Tsg_Trial_Model</class>
+                <resourceModel>tsg_trial_resource</resourceModel>
+            </tsg_trial>
+            <tsg_trial_resource>
+                <class>Tsg_Trial_Model_Resource</class>
+                <entities>
+                    <news>
+                        <table>tsg_trial_news</table>
+                    </news>
+                </entities>
+            </tsg_trial_resource>
+        </models>
         <blocks>
-            <trial>
+            <tsg_trial>
                 <class>Tsg_Trial_Block</class>
-            </trial>
+            </tsg_trial>
         </blocks>
+        <resources>
+            <tsg_trial_setup>
+                <setup>
+                    <module>Tsg_Trial</module>
+                </setup>
+            </tsg_trial_setup>
+        </resources>
+
     </global>
 </config>

@@ -7,9 +7,23 @@ class Tsg_Trial_IndexController
     {
         echo "Hello Magento";
     }
+
     public function advertisingAction()
     {
         $this->loadLayout();
         $this->renderLayout();
+    }
+
+    public function newsListAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    public function newsViewAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
+
     }
 }
