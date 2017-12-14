@@ -1,12 +1,36 @@
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php echo $this->getPagerHtml(); ?>
 <div>
-    <?php
-    $news = $this->getNews();
-    foreach ($news as $item) { ?>
-        <div class="clear-fix">
-            <h3 align="center"><?php echo $item->getTitle(); ?></h3>
-            <p><?php if($item->getImage()) echo $this->newsImage($item->getImage()); ?>
-                <span><?php echo $this->newsContent($item->getContent(), $item->getId()); ?></span>
-            </p>
-        </div>
-    <?php } ?>
+    <h1><?php echo $this->__('News') ?></h1>
 </div>
+<?php $productId = Mage::app()->getRequest()->getParam('product');
+if ($productId != null) {
+    $newsIds = $this->getProductNews($productId);
+    $collection = $this->loadProductNews($newsIds);
+} else {
+    $collection = $this->getCollection();
+}?>
+<?php if ($collection->getSize()): ?>
+
+    <table id="news table">
+        <div>
+            <?php
+            foreach ($collection as $item) { ?>
+                <div class="clear-fix">
+                    <h3 align="center"><?php echo $item->getTitle(); ?></h3>
+                    <p><?php if ($item->getImage()) {
+                            echo $this->newsImage($item->getImage());
+                        } ?>
+                        <span><?php echo $this->newsContent($item->getContent(), $item->getId()); ?></span>
+                    </p>
+                </div>
+            <?php } ?>
+        </div>
+    </table>
+    <script type="text/javascript">decorateTable('news table');</script>
+    <?php echo $this->getPagerHtml(); ?>
+<?php else: ?>
+    <p><?php echo $this->__('There is no news.'); ?></p>
+<?php endif ?>
+
+

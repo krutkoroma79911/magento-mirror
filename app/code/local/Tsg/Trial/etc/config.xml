@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Tsg_Trial>
-            <version>0.0.1</version>
+            <version>0.0.4</version>
         </Tsg_Trial>
     </modules>
     <admin>
@@ -53,6 +53,11 @@
                     </news>
                 </entities>
             </tsg_trial_resource>
+            <importexport>
+                <rewrite>
+                    <export_entity_product>Tsg_Trial_Model_Trial_Export_Product</export_entity_product>
+                </rewrite>
+            </importexport>
         </models>
         <blocks>
             <tsg_trial>
@@ -66,6 +71,17 @@
                 </setup>
             </tsg_trial_setup>
         </resources>
-
     </global>
+    <adminhtml>
+        <events>
+            <importexport_export_export>
+                <observers>
+                    <tsg_trial>
+                        <class>tsg_trial/observer</class>
+                        <method>mainColumnsExport</method>
+                    </tsg_trial>
+                </observers>
+            </importexport_export_export>
+        </events>
+    </adminhtml>
 </config>

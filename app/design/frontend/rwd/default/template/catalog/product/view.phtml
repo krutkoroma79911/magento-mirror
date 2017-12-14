@@ -30,7 +30,9 @@
  * @see Mage_Catalog_Block_Product_View
  * @see Mage_Review_Block_Product_View
  */
+
 ?>
+
 <?php $_helper = $this->helper('catalog/output'); ?>
 <?php $_product = $this->getProduct(); ?>
 <script type="text/javascript">
@@ -188,4 +190,7 @@
     <?php echo $this->getChildHtml('upsell_products') ?>
     <?php echo $this->getChildHtml('product_additional_data') ?>
 
-</div>
+    <?php
+    echo "<a href='". Mage::getBaseUrl().'trial/index/newslist/product/'.$_product->getId() ."'>Watch all the news</a>";
+    ?>
+    </div>

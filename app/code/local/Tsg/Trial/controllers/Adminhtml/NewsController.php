@@ -83,6 +83,7 @@ class Tsg_Trial_Adminhtml_NewsController
                     $data['image'] = $data['image']['value'];
                 }
             }
+            $data['created_at'] = Mage::getModel('core/date')->timestamp(time());
             $model = Mage::getModel('tsg_trial/news')->setData($data);
             try {
                 $model->save()->getId();
@@ -91,8 +92,10 @@ class Tsg_Trial_Adminhtml_NewsController
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
+
         }
     }
+
 
     public function deleteAction()
     {
@@ -106,5 +109,6 @@ class Tsg_Trial_Adminhtml_NewsController
             return;
         }
     }
+
 
 }

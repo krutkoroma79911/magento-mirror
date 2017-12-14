@@ -24,7 +24,6 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Grid
     public function _prepareColumns()
     {
         $helper = Mage::helper('tsg_trial');
-        $currency = (string)Mage::getStoreConfig(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_BASE);
         $this->addColumn('id', array(
             'header' => $helper->__('ID'),
             'index' => 'id',
@@ -41,6 +40,10 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Grid
             'header' => $helper->__('Image'),
             'index' => 'image',
             'renderer' => 'Tsg_Trial_Block_Adminhtml_Trial_Render_Image'
+        ));
+        $this->addColumn('priority', array(
+            'header' => $helper->__('Priority'),
+            'index' => 'priority'
         ));
         $this->addColumn('action',
             array(

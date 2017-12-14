@@ -33,6 +33,11 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Edit_Tab_Form
             'required' => false,
             'name' => 'image'
         ));
+        $fieldset->addField('priority', 'text', array(
+            'label' => $helper->__('Priority'),
+            'required' => false,
+            'name' => 'priority'
+        ));
 
         $form->setValues($newsModel->getData());
 
