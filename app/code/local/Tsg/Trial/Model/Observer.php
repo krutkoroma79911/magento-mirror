@@ -36,9 +36,4 @@ class Tsg_Trial_Model_Observer
         $topNewsId = array_search(max($rating), $rating);
         return $topNewsId;
     }
-
-    public function mainColumnsExport()
-    {
-        $a = 1;
-    }
 }

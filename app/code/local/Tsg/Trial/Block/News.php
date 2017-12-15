@@ -115,7 +115,6 @@ class Tsg_Trial_Block_News
     {
         $pager = $this->getLayout()->createBlock('page/html_pager', 'news.pager');
         $pager->setAvailableLimit(array(5 => 5, 10 => 10, 20 => 20, 'all' => 'all'));
-        //$collection = $this->getCollection();
         $pager->setCollection($collection);
         $this->setChild('pager', $pager);
         $collection->load();
