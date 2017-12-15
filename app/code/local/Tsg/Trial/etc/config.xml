@@ -82,14 +82,6 @@
                     </tsg_trial>
                 </observers>
             </catalog_product_save_before>
-            <importexport_export_export>
-                <observers>
-                    <tsg_trial>
-                        <class>tsg_trial/observer</class>
-                        <method>mainColumnsExport</method>
-                    </tsg_trial>
-                </observers>
-            </importexport_export_export>
         </events>
     </adminhtml>
 </config>
