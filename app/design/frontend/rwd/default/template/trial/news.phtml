@@ -1,17 +1,17 @@
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php
+/**
+ * @var $this Tsg_Trial_Block_News
+ * @var $collection Tsg_Trial_Model_Resource_News_Collection
+ */
+?>
+<?php
+$collection = $this->getCollection();
+$this->getPager($collection) ?>
 <?php echo $this->getPagerHtml(); ?>
 <div>
     <h1><?php echo $this->__('News') ?></h1>
 </div>
-<?php $productId = Mage::app()->getRequest()->getParam('product');
-if ($productId != null) {
-    $newsIds = $this->getProductNews($productId);
-    $collection = $this->loadProductNews($newsIds);
-} else {
-    $collection = $this->getCollection();
-}?>
 <?php if ($collection->getSize()): ?>
-
     <table id="news table">
         <div>
             <?php
