@@ -43,30 +43,35 @@ $news = array(
         'content' => 'Just the 1 news that created by install data script!!!',
         'image' => '',
         'priority' => '5',
+        'created_at' => date('Y-m-d H:i:s')
     ),
     array(
         'title' => 'This is custom Title 2',
         'content' => 'Just the 2 news that created by install data script!!!',
         'image' => '',
         'priority' => '4',
+        'created_at' => date('Y-m-d H:i:s')
     ),
     array(
         'title' => 'This is custom Title 3',
         'content' => 'Just the 3 news that created by install data script!!!',
         'image' => '',
         'priority' => '3',
+        'created_at' => date('Y-m-d H:i:s')
     ),
     array(
         'title' => 'This is custom Title 4',
         'content' => 'Just the 4 news that created by install data script!!!',
         'image' => '',
         'priority' => '0',
+        'created_at' => date('Y-m-d H:i:s')
     ),
     array(
         'title' => 'This is custom Title 5',
         'content' => 'Just the 5 news that created by install data script!!!',
         'image' => '',
         'priority' => '0',
+        'created_at' => date('Y-m-d H:i:s')
     ),
 );
 $model = Mage::getModel('tsg_trial/news');

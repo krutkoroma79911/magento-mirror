@@ -12,6 +12,7 @@ class Tsg_Trial_Model_Observer
         $mainNews = $product->getMainNews();
         if ($newsIds['0'] != 'no' && $mainNews == 'no') {
             $theNewestNews = Mage::getModel('tsg_trial/news')->getCollection()
+                ->addIdFilter($newsIds)
                 ->setOrder('created_at', 'DESC')
                 ->getFirstItem();
             $product->setMainNews($theNewestNews->getId());
@@ -28,8 +29,9 @@ class Tsg_Trial_Model_Observer
         $rating = [];
         foreach ($news as $item) {
             $rating[$item->getId()] = ['rating' => strtotime($item->getCreatedAt())];
-            if ($item->getPriority() != 0) {
-                $ratingPoint = $item->getPriority() * 86400;
+            if ($item->getPriority() !== 0) {
+                $priority = $item->getPriority();
+                $ratingPoint = $priority * 86400;
                 $rating[$item->getId()]['rating'] += $ratingPoint;
             }
         }
