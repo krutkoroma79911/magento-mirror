@@ -26,7 +26,6 @@ $installer->getConnection()
             'default' => null,
             'comment' => 'Priority'
         )
-
     );
 
 $installer->endSetup();

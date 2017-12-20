@@ -8,7 +8,7 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Edit_Tabs
         $helper = Mage::helper('tsg_trial');
         parent::__construct();
         $this->setId('trial_tabs');
-        $this->setDestElementId('edit_form'); // this should be same as the form id define above
+        $this->setDestElementId('edit_form');
         $this->setTitle($helper->__('News Information'));
     }
 

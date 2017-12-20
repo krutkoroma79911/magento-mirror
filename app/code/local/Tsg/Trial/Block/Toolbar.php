@@ -5,7 +5,7 @@ class Tsg_Trial_Block_Toolbar
 {
     public function getAvailableOrders()
     {
-        $sortArray = ['created_at'=>'Date','content' => 'Content'];
+        $sortArray = ['created_at' => 'Date', 'content' => 'Content'];
         return $sortArray;
     }
 

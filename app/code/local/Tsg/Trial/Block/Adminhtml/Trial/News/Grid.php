@@ -4,7 +4,11 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Grid
     extends Mage_Adminhtml_Block_Widget_Grid
 
 {
-    public function __construct(array $attributes = array())
+    /**
+     * Tsg_Trial_Block_Adminhtml_Trial_News_Grid constructor.
+     * @param array $attributes
+     */
+    public function __construct($attributes = array())
     {
         parent::__construct();
         $this->setId('tsg_trial_grid');
@@ -14,6 +18,9 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Grid
         $this->setUseAjax(true);
     }
 
+    /**
+     * @return Mage_Adminhtml_Block_Widget_Grid
+     */
     protected function _prepareCollection()
     {
         $collection = Mage::getModel('tsg_trial/news')->getCollection();
@@ -21,6 +28,9 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Grid
         return parent::_prepareCollection();
     }
 
+    /**
+     * Preparing data and columns for grid
+     */
     public function _prepareColumns()
     {
         $helper = Mage::helper('tsg_trial');
@@ -68,6 +78,9 @@ class Tsg_Trial_Block_Adminhtml_Trial_News_Grid
             ));
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('*/*/grid', array('_current' => true));

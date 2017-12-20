@@ -17,5 +17,4 @@ class Tsg_Trial_Model_Resource_News_Collection
         }
         return $this;
     }
-
 }

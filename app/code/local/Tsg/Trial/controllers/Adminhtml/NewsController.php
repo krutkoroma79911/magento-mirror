@@ -3,30 +3,25 @@
 class Tsg_Trial_Adminhtml_NewsController
     extends Mage_Adminhtml_Controller_Action
 {
-
     public function indexAction()
     {
-        $this->_title($this->__('News'))->_title($this->__('Manage News'));
+        $this->_title($this->__('News'))
+            ->_title($this->__('Manage News'));
         $this->loadLayout();
-        $this->_setActiveMenu('tsg_trial/news');
-        $this->_addContent($this->getLayout()->createBlock('tsg_trial/adminhtml_trial_news'));
         $this->renderLayout();
     }
 
     public function gridAction()
     {
         $this->loadLayout();
-        $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('tsg_trial/adminhtml_trial_news_grid')->toHtml());
+        $this->renderLayout();
     }
 
     public function newAction()
     {
-        $this->_title($this->__('News'))->_title($this->__('Create New'));
+        $this->_title($this->__('News'))
+            ->_title($this->__('Create News'));
         $this->loadLayout();
-        $this->_setActiveMenu('tsg_trial/news');
-        $this->_addContent($this->getLayout()->createBlock('tsg_trial/adminhtml_trial_news_edit'))
-            ->_addLeft($this->getLayout()->createBlock('tsg_trial/adminhtml_trial_news_edit_tabs'));
         $this->renderLayout();
     }
 
@@ -34,11 +29,7 @@ class Tsg_Trial_Adminhtml_NewsController
     {
         $newsId = (int)$this->getRequest()->getParam('id');
         $this->_initNews($newsId);
-
         $this->loadLayout();
-        $this->_addContent($this->getLayout()->createBlock('tsg_trial/adminhtml_trial_news_edit'))
-            ->_addLeft($this->getLayout()->createBlock('tsg_trial/adminhtml_trial_news_edit_tabs'));
-        $this->_setActiveMenu('tsg_trial/news');
         $this->renderLayout();
     }
 
@@ -95,7 +86,6 @@ class Tsg_Trial_Adminhtml_NewsController
 
         }
     }
-
 
     public function deleteAction()
     {

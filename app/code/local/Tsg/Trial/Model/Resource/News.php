@@ -5,6 +5,6 @@ class Tsg_Trial_Model_Resource_News
 {
     public function _construct()
     {
-        $this->_init('tsg_trial/news','id');
+        $this->_init('tsg_trial/news', 'id');
     }
 }

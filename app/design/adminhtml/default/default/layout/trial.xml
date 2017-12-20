@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_news_index>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>tsg_trial/news</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="tsg_trial/adminhtml_trial_news" name="admin.news"/>
+        </reference>
+    </adminhtml_news_index>
+    <adminhtml_news_grid>
+        <remove name="root"/>
+        <block type="tsg_trial/adminhtml_trial_news_grid" name="admin.news.grid" output="toHtml"/>
+    </adminhtml_news_grid>
+    <adminhtml_news_edit>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>tsg_trial/news_edit</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="tsg_trial/adminhtml_trial_news_edit" name="admin.news.edit"/>
+        </reference>
+        <reference name="left">
+            <block type="tsg_trial/adminhtml_trial_news_edit_tabs" name="admin.news.tab"/>
+        </reference>
+    </adminhtml_news_edit>
+    <adminhtml_news_new>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>tsg_trial/news_new</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="tsg_trial/adminhtml_trial_news_edit" name="admin.news.edit"/>
+        </reference>
+        <reference name="left">
+            <block type="tsg_trial/adminhtml_trial_news_edit_tabs" name="admin.news.tab"/>
+        </reference>
+    </adminhtml_news_new>
+</layout>

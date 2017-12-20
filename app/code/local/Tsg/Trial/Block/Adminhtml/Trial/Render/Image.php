@@ -9,6 +9,11 @@
 class Tsg_Trial_Block_Adminhtml_Trial_Render_Image
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
+    /**
+     * Rendering image. Return link of image or empty string
+     * @param Varien_Object $row
+     * @return string
+     */
     public function render(Varien_Object $row)
     {
         $value = $row->getData($this->getColumn()->getIndex());

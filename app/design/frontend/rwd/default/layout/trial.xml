@@ -17,7 +17,6 @@
         <reference name="content">
             <block type="tsg_trial/news" name="trial" template="trial/news.phtml"/>
         </reference>
-
     </trial_index_newslist>
     <trial_index_newsview>
         <reference name="content">

@@ -45,15 +45,8 @@ class Tsg_Trial_Model_Trial_Export_Product
             $limitProducts = $minProductsLimit;
         }
         $offsetProducts = 0;
-        // getting news collection
-        $newsCollection = Mage::getModel('tsg_trial/news')->getCollection();
-        $newsData = array();
-        foreach ($newsCollection as $news) {
-            $newsData[$news->getId()] = ['content' => $news->getContent() ?: '', 'image' => $news->getImage() ?: ''];
-        }
         while (true) {
             ++$offsetProducts;
-
             $dataRows = array();
             $rowCategories = array();
             $rowWebsites = array();
@@ -71,7 +64,6 @@ class Tsg_Trial_Model_Trial_Export_Product
                 if ($collection->getCurPage() < $offsetProducts) {
                     break;
                 }
-                $collection->load();
 
                 if ($collection->count() == 0) {
                     break;
@@ -95,13 +87,6 @@ class Tsg_Trial_Model_Trial_Export_Product
                         if (!empty($this->_attributeValues[$attrCode])) {
                             if ($this->_attributeTypes[$attrCode] == 'multiselect') {
                                 $attrValue = explode(',', $attrValue);
-                                if ($attrCode == 'news') {
-                                    $rowMultiselects[$itemId][$storeId]['news_id'] = $attrValue;
-                                    foreach ($attrValue as $value) {
-                                        $rowMultiselects[$itemId][$storeId]['news_content'][] = $newsData[$value]['content'];
-                                        $rowMultiselects[$itemId][$storeId]['news_image'][] = $newsData[$value]['image'];
-                                    }
-                                }
                                 $attrValue = array_intersect_key(
                                     $this->_attributeValues[$attrCode],
                                     array_flip($attrValue)
@@ -144,6 +129,11 @@ class Tsg_Trial_Model_Trial_Export_Product
                             } else {
                                 if (isset($this->_attributeValues[$attrCode][$attrValue])) {
                                     $attrValue = $this->_attributeValues[$attrCode][$attrValue];
+                                    if ($attrCode == 'main_news') {
+                                        $dataRows[$itemId][$storeId]['main_news_image'] = $item->getNewsImage() ?: '';
+                                        $dataRows[$itemId][$storeId]['main_news_content'] = $item->getNewsContent() ?: '';
+                                        $dataRows[$itemId][$storeId]['main_news_id'] = $item->getMainNews();
+                                    }
                                 } else {
                                     $attrValue = null;
                                 }
@@ -394,8 +384,8 @@ class Tsg_Trial_Model_Trial_Export_Product
                         '_super_attribute_price_corr'
                     ));
                 }
-                if (in_array('news', $headerCols)) {
-                    $headerCols = array_merge($headerCols, ['news_id', 'news_content', 'news_image']);
+                if (in_array('main_news', $headerCols)) {
+                    $headerCols = array_merge($headerCols, ['main_news_image', 'main_news_content', 'main_news_id']);
                 }
                 $writer->setHeaderCols($headerCols);
             }
@@ -534,4 +524,77 @@ class Tsg_Trial_Model_Trial_Export_Product
         }
         return $writer->getContents();
     }
+
+    protected function _prepareEntityCollection(Mage_Eav_Model_Entity_Collection_Abstract $collection)
+    {
+        if (!isset($this->_parameters[Mage_ImportExport_Model_Export::FILTER_ELEMENT_GROUP])
+            || !is_array($this->_parameters[Mage_ImportExport_Model_Export::FILTER_ELEMENT_GROUP])) {
+            $exportFilter = array();
+        } else {
+            $exportFilter = $this->_parameters[Mage_ImportExport_Model_Export::FILTER_ELEMENT_GROUP];
+        }
+        $exportAttrCodes = $this->_getExportAttrCodes();
+
+        foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
+            $attrCode = $attribute->getAttributeCode();
+
+            // filter applying
+            if (isset($exportFilter[$attrCode])) {
+                $attrFilterType = Mage_ImportExport_Model_Export::getAttributeFilterType($attribute);
+
+                if (Mage_ImportExport_Model_Export::FILTER_TYPE_SELECT == $attrFilterType) {
+                    if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
+                        $collection->addAttributeToFilter($attrCode, array('eq' => $exportFilter[$attrCode]));
+                    }
+                } elseif (Mage_ImportExport_Model_Export::FILTER_TYPE_INPUT == $attrFilterType) {
+                    if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
+                        $collection->addAttributeToFilter($attrCode, array('like' => "%{$exportFilter[$attrCode]}%"));
+                    }
+                } elseif (Mage_ImportExport_Model_Export::FILTER_TYPE_DATE == $attrFilterType) {
+                    if (is_array($exportFilter[$attrCode]) && count($exportFilter[$attrCode]) == 2) {
+                        $from = array_shift($exportFilter[$attrCode]);
+                        $to = array_shift($exportFilter[$attrCode]);
+
+                        if (is_scalar($from) && !empty($from)) {
+                            $date = Mage::app()->getLocale()->date($from, null, null, false)->toString('MM/dd/YYYY');
+                            $collection->addAttributeToFilter($attrCode, array('from' => $date, 'date' => true));
+                        }
+                        if (is_scalar($to) && !empty($to)) {
+                            $date = Mage::app()->getLocale()->date($to, null, null, false)->toString('MM/dd/YYYY');
+                            $collection->addAttributeToFilter($attrCode, array('to' => $date, 'date' => true));
+                        }
+                    }
+                } elseif (Mage_ImportExport_Model_Export::FILTER_TYPE_NUMBER == $attrFilterType) {
+                    if (is_array($exportFilter[$attrCode]) && count($exportFilter[$attrCode]) == 2) {
+                        $from = array_shift($exportFilter[$attrCode]);
+                        $to = array_shift($exportFilter[$attrCode]);
+
+                        if (is_numeric($from)) {
+                            $collection->addAttributeToFilter($attrCode, array('from' => $from));
+                        }
+                        if (is_numeric($to)) {
+                            $collection->addAttributeToFilter($attrCode, array('to' => $to));
+                        }
+                    }
+                }
+            }
+            if (in_array($attrCode, $exportAttrCodes)) {
+                $collection->addAttributeToSelect($attrCode);
+            }
+        }
+        if (in_array('main_news', $exportAttrCodes)) {
+            $tableName = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_int');
+            $newsTable = Mage::getResourceModel('tsg_trial/news')->getTable('tsg_trial/news');
+            $attributeId = Mage::getResourceModel('eav/entity_attribute')
+                ->getIdByCode('catalog_product', 'main_news');
+            $collection->getSelect()->join(array('b' => $tableName), 'b.entity_id = e.entity_id',
+                array('b.value'))
+                ->join(array('news' => $newsTable), 'b.value = news.id',
+                    array('news_image' => 'image', 'news_content' => 'content', 'news_title' => 'title'))
+                ->where('b.attribute_id = ' . $attributeId);
+        }
+
+        return $collection;
+    }
+
 }

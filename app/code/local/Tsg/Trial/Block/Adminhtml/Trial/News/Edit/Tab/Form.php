@@ -1,9 +1,15 @@
 <?php
 
+/**
+ * This class preparing edit tab form for news form
+ * Class Tsg_Trial_Block_Adminhtml_Trial_News_Edit_Tab_Form
+ */
 class Tsg_Trial_Block_Adminhtml_Trial_News_Edit_Tab_Form
     extends Mage_Adminhtml_Block_Widget_Form
 {
     /**
+     * Function to prerare Form on the grid
+     *
      * @return Mage_Adminhtml_Block_Widget_Form
      */
     protected function _prepareForm()

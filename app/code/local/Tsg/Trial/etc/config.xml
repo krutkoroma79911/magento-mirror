@@ -83,5 +83,12 @@
                 </observers>
             </catalog_product_save_before>
         </events>
+        <layout>
+            <updates>
+                <trial>
+                    <file>trial.xml</file>
+                </trial>
+            </updates>
+        </layout>
     </adminhtml>
 </config>
