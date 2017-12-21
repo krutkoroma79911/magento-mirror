@@ -585,9 +585,9 @@ class Tsg_Trial_Model_Trial_Export_Product
         if (in_array('main_news', $exportAttrCodes)) {
             $newsTable = Mage::getResourceModel('tsg_trial/news')->getTable('tsg_trial/news');
             $entity = $collection->getResource();
-            $attribute = Mage::getSingleton('eav/config')->getCollectionAttribute($entity->getType(), 'main_news');
-            $attributeTable = $attribute->getBackendTable();
-            $attributeId = $attribute->getAttributeId();
+            $newsAttribute = Mage::getSingleton('eav/config')->getCollectionAttribute($entity->getType(), 'main_news');
+            $attributeTable = $newsAttribute->getBackendTable();
+            $attributeId = $newsAttribute->getAttributeId();
             $collection->getSelect()->join(array('b' => $attributeTable), 'b.entity_id = e.entity_id',
                 array('b.value'))
                 ->join(array('news' => $newsTable), 'b.value = news.id',
