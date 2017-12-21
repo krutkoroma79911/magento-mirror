@@ -583,11 +583,12 @@ class Tsg_Trial_Model_Trial_Export_Product
             }
         }
         if (in_array('main_news', $exportAttrCodes)) {
-            $tableName = Mage::getSingleton('core/resource')->getTableName('catalog_product_entity_int');
             $newsTable = Mage::getResourceModel('tsg_trial/news')->getTable('tsg_trial/news');
-            $attributeId = Mage::getResourceModel('eav/entity_attribute')
-                ->getIdByCode('catalog_product', 'main_news');
-            $collection->getSelect()->join(array('b' => $tableName), 'b.entity_id = e.entity_id',
+            $entity = $collection->getResource();
+            $attribute = Mage::getSingleton('eav/config')->getCollectionAttribute($entity->getType(), 'main_news');
+            $attributeTable = $attribute->getBackendTable();
+            $attributeId = $attribute->getAttributeId();
+            $collection->getSelect()->join(array('b' => $attributeTable), 'b.entity_id = e.entity_id',
                 array('b.value'))
                 ->join(array('news' => $newsTable), 'b.value = news.id',
                     array('news_image' => 'image', 'news_content' => 'content', 'news_title' => 'title'))
