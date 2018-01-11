@@ -9,4 +9,3 @@ relative_assets = true
 output_style = :expanded
 environment = :production
 
-add_import_path "../../../rwd/default/scss"

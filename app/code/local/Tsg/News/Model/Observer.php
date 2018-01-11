@@ -8,7 +8,6 @@ class Tsg_News_Model_Observer
         $product = $observer->getProduct();
         $newslist = $product->getNewslist();
         $mainNews = $product->getMainnews();
-
         if ($newslist[0] === 'no') {
             $mainNews = 'no';
         } elseif ((is_array($newslist) && $newslist[0] !== 'no') && (empty($mainNews) || $mainNews === 'no')) {
@@ -20,10 +19,9 @@ class Tsg_News_Model_Observer
         } elseif ((is_array($newslist) && $newslist[0] !== 'no') && $mainNews !== 'no') {
             $productId = $product->getId();
             if ($productId) {
-                $currentProductNewsData = explode(',', Mage::getModel('catalog/product')->load($productId)
-                    ->getNewslist());
+                $currentProductNewsData = explode(',', $product->getOrigData('newslist'));
                 if ($currentProductNewsData['0'] !== 'no') {
-                    if ($currentProductNewsData != $newslist) {
+                    if ($currentProductNewsData !== $newslist) {
                         $mainNews = $this->mostPriorityNews($newslist);
                     }
                 }
@@ -32,7 +30,6 @@ class Tsg_News_Model_Observer
 
         $product->setNewslist($newslist);
         $product->setMainnews($mainNews);
-        $observer->setProduct($product);
 
     }
 

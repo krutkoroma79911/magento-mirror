@@ -10,14 +10,7 @@ class Tsg_News_Block_News_List
     public function __construct()
     {
         parent::__construct();
-        $productId = $this->getRequest()->getParam('product');
-        if ($productId === null) {
-            /** @var Tsg_News_Model_Resource_News $collection */
-            $collection = Mage::getModel('tsg_news/news')->getCollection();
-        } else {
-            $collection = $this->getProductNews($productId);
-        }
-        $collection = $this->sortNewsByOrder($collection);
+        $collection = $this->getProductNews();
         $this->setCollection($collection);
     }
 
@@ -60,13 +53,20 @@ class Tsg_News_Block_News_List
      * @param $productId
      * @return Tsg_News_Model_Resource_News_Collection
      */
-    public function getProductNews($productId)
+    public function getProductNews()
     {
-        $product = Mage::getModel('catalog/product')->load($productId);
-        $newsIds = explode(',', $product->getNewslist());
-        /** @var Tsg_News_Model_Resource_News_Collection $collection */
-        $collection = Mage::getModel('tsg_news/news')->getCollection()->addIdsFilter($newsIds);
-        return $collection;
+        $productId = $this->getRequest()->getParam('product');
+        if ($productId === null) {
+            /** @var Tsg_News_Model_Resource_News $collection */
+            $collection = Mage::getModel('tsg_news/news')->getCollection();
+        } else {
+            $product = Mage::getModel('catalog/product')->load($productId);
+            $newsIds = explode(',', $product->getNewslist());
+            /** @var Tsg_News_Model_Resource_News_Collection $collection */
+            $collection = Mage::getModel('tsg_news/news')->getCollection()->addIdsFilter($newsIds);
+            //return $collection;
+        }
+        return $this->sortNewsByOrder($collection);
     }
 
     /**
@@ -83,16 +83,41 @@ class Tsg_News_Block_News_List
         );
         $params = $this->getRequest()->getParams();
         if (isset ($params['dir'], $params['order'])) {
-            $order = array(
+            $paramsToCheck = array(
                 'dir' => $params['dir'],
                 'order' => $params['order'],
             );
+            $result = $this->checkAllowedParams($paramsToCheck);
+            if ($result) {
+                $order = $paramsToCheck;
+            }
         }
         /** @var Tsg_News_Model_Resource_News_Collection $collection */
         $collection->setOrder($order['order'], $order['dir']);
         return $collection;
+    }
 
+    /**
+     * @param $paramsToCheck
+     * @return bool
+     */
+    public function checkAllowedParams($paramsToCheck)
+    {
+        $result = false;
+        $allowedOrder = array(
+            '0' => 'news_priority',
+            '1' => 'created_at',
+        );
+        $allowedDir = array(
+            '0' => 'asc',
+            '1' => 'desc',
+        );
 
+        if (in_array($paramsToCheck['dir'], $allowedDir) && in_array($paramsToCheck['order'], $allowedOrder)) {
+            $result = true;
+        }
+
+        return $result;
     }
 
 }

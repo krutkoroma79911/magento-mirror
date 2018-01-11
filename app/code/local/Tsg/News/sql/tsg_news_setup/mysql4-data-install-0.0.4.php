@@ -4,7 +4,7 @@ $news = array();
 for ($i = 1; $i < 6; $i++) {
     $news[] = array(
         'news_title' => 'Title ' . $i,
-        'news_content' => 'Conetnt ' . $i,
+        'news_content' => 'Content ' . $i,
         'news_priority' => $i,
         'created_at' => strftime('%Y-%m-%d %H:%M:%S', time()),
     );
@@ -20,10 +20,13 @@ $categoryName = 'Custom Products';
 $category = Mage::getResourceModel('catalog/category_collection')
     ->addFieldToFilter('name', $categoryName);
 if ($category->getFirstItem()->getId() === null) {
+    $storeId = Mage::app()->getStore()->getStoreId();
+    $parentCatId = Mage::app()->getStore($storeId)->getRootCategoryId();
+    $parentCat = Mage::getModel('catalog/category')->load($parentCatId);
     Mage::register('isSecureArea', 1);
     Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
     $category = Mage::getModel('catalog/category');
-    $category->setPath('1/2')// set parent to be root category
+    $category->setPath($parentCat->getPath())// set parent to be root category
     ->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)
         ->setName($categoryName)
         ->setIsActive(true)
