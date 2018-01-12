@@ -2,11 +2,11 @@
 <config>
     <menu>
         <exports translate="title" module="tsg_exports">
-            <title>Экспорты</title>
+            <title>Exports</title>
             <sort_order>55</sort_order>
             <children>
                 <export translate="title" module="tsg_exports">
-                    <title>Управление Экспортами</title>
+                    <title>Manage Exports</title>
                     <action>adminhtml/exports</action>
                     <sort_order>0</sort_order>
                 </export>
@@ -18,11 +18,11 @@
             <admin>
                 <children>
                     <exports translate="title" module="tsg_exports">
-                        <title>Экспорты</title>
+                        <title>Exports</title>
                         <sort_order>55</sort_order>
                         <children>
                             <export translate="title" module="tsg_exports">
-                                <title>Управление Экспортами</title>
+                                <title>Manage Exports</title>
                                 <sort_order>0</sort_order>
                             </export>
                         </children>

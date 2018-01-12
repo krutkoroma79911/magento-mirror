@@ -58,7 +58,17 @@
                 </tsg_exports>
             </updates>
         </layout>
+        <translate>
+            <modules>
+                <tsg_exports>
+                    <files>
+                        <default>Tsg_Exports.csv</default>
+                    </files>
+                </tsg_exports>
+            </modules>
+        </translate>
     </adminhtml>
+
     <crontab>
         <jobs>
             <tsg_exports>

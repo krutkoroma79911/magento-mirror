@@ -7,21 +7,9 @@ class Tsg_Exports_Model_Exports
     protected $_categoryInstance = null;
 
     protected $_attributesToSelect = array(
-        '0' => 'url_key',
-        '1' => 'price',
-        '2' => 'image',
+        '0' => 'price',
+        '1' => 'image',
     );
-
-    protected $_attributeKeysToJsonExport = array(
-        'url_key' => '1',
-        'price' => '2',
-        'image' => '3',
-        'sku' => '4',
-        'category_id' => '5',
-        'qty' => '6',
-        'currency_id' => '7',
-    );
-
 
     protected function _construct()
     {
@@ -44,7 +32,10 @@ class Tsg_Exports_Model_Exports
                     'product_id = entity_id', null, 'left'
                 )->joinField('qty', 'cataloginventory/stock_item', 'qty', 'product_id=entity_id', null,
                     'left'
-                )->addAttributeToFilter('category_id', array('in' => explode(',', $export['categories'])));
+                )->joinTable('cataloginventory/stock_item', 'product_id=entity_id',
+                    array('stock_status' => 'is_in_stock'))
+                ->addAttributeToSelect('stock_status')
+                ->addAttributeToFilter('category_id', array('in' => explode(',', $export['categories'])));
             if (!empty($export['shares_filter'])) {
                 $productCollection->addAttributeToFilter('tsg_shares',
                     array('in' => explode(',', $export['shares_filter'])));
@@ -67,17 +58,48 @@ class Tsg_Exports_Model_Exports
         switch ($export['format']) {
             case 'yaml' :
                 $content = $this->exportYml($productCollection);
-                $exoportFileName = $export['file_name'] . '.yml';
+                $exportFileName = $export['file_name'];
                 break;
             case 'json' :
                 $content = $this->exportJson($productCollection);
-                $exoportFileName = $export['file_name'] . '.json';
+                $exportFileName = $export['file_name'];
                 break;
             default :
                 $content = 'Export format is invalid';
-                $exoportFileName = 'default';
+                $exportFileName = 'default';
         }
-        file_put_contents(Mage::getBaseDir('media') . DS . $exoportFileName, $content);
+
+        $baseMediaDir = Mage::getBaseDir('media');
+        $baseTsgMediaDir = $baseMediaDir . DS . 'tsg';
+        $baseTsgExportDir = $baseTsgMediaDir . DS . 'exports';
+        if (!file_exists($baseTsgMediaDir)) {
+            mkdir($baseTsgMediaDir, 755);
+        }
+        if (!file_exists($baseTsgExportDir)) {
+            mkdir($baseTsgExportDir, 755);
+        }
+        $baseExportPath = false;
+        $ext = pathinfo($exportFileName, PATHINFO_EXTENSION);
+        switch ($ext) {
+            case 'yml' :
+                $baseTsgExportYmlDir = $baseTsgExportDir . DS . 'yml';
+                if (!file_exists($baseTsgExportYmlDir)) {
+                    mkdir($baseTsgExportYmlDir, 755);
+                }
+                $baseExportPath = $baseTsgExportYmlDir . DS . $exportFileName;
+                break;
+            case 'json' :
+                $baseTsgExportYmlDir = $baseTsgExportDir . DS . 'json';
+                if (!file_exists($baseTsgExportYmlDir)) {
+                    mkdir($baseTsgExportYmlDir, 755);
+                }
+                $baseExportPath = $baseTsgExportYmlDir . DS . $exportFileName;
+                break;
+        }
+
+        if ($baseExportPath !== '') {
+            file_put_contents($baseExportPath, $content);
+        }
     }
 
     /**
@@ -104,15 +126,20 @@ class Tsg_Exports_Model_Exports
             $this->xml->startElement('offer');
             $this->xml->writeAttribute('id', $product->getEntityId());
             $this->xml->writeAttribute('type', 'vendor.model');
-            $this->xml->writeAttribute('available', 'true');
-            $this->xml->writeElement('url', $product->getUrlKey());
+            $stockValue = 'false';
+            if ($product->getStockStatus()) {
+                $stockValue = 'true';
+            }
+            $this->xml->writeAttribute('available', $stockValue);
+            $this->xml->writeElement('url', $product->getProductUrl());
             $this->xml->writeElement('price', $product->getPrice());
-            $this->xml->writeElement('currencyId',$currencyСode);
-            $this->xml->writeElement('categoryId', $product->getCategoryId());
+            $this->xml->writeElement('currencyId', $currencyСode);
+            $this->xml->writeElement('categoryId', $product->getData('category_id'));
             $productImageContent = 'no_selection';
             if ($product->getImage() !== 'no_selection') {
-                $productImageContent = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product'
-                    . $product->getImage();
+                $productImageContent = Mage::helper('catalog/image')->init($product, 'image')->resize(200,
+                    200)->__toString();
+
             }
             $this->xml->writeElement('picture', $productImageContent);
             $this->xml->writeElement('qty', $product->getQty());
@@ -137,12 +164,25 @@ class Tsg_Exports_Model_Exports
         $currencyCode = $this->getDefaultCurrencyCode();
         foreach ($productCollection as $product) {
             if ($product->getImage() !== 'no_selection') {
-                $product['image'] = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product'
-                    . $product->getImage();
+                $product['image'] = Mage::helper('catalog/image')->init($product, 'image')->resize(200,
+                    200)->__toString();
             }
             $product->setCurrencyId($currencyCode);
-            $productsData['offers']['offer ' . $product->getEntityId()] = array_intersect_key($product->getData(),
-                $this->_attributeKeysToJsonExport);
+            $dataArray = [
+                'url' => $product->getProductUrl(),
+                'price' => $product->getPrice(),
+                'currencyId' => $product->getCurrencyId(),
+                'categoryId' => $product->getData('category_id'),
+                'picture' => $product->getImage(),
+                'qty' => $product->getQty(),
+            ];
+            $date = date('Y-m-d H:i:s');
+            $stockValue = 'false';
+            if ($product->getStockStatus()) {
+                $stockValue = 'true';
+            }
+            $productKey = 'offer ' . $product->getEntityId() . ' available ' . $stockValue;
+            $productsData['json_catalog ' . $date]['offers'][$productKey] = $dataArray;
         }
         $content .= json_encode($productsData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
         return $content;

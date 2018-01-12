@@ -1,11 +1,21 @@
 <?xml version="1.0"?>
 <layout>
     <adminhtml_exports_index>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>exports/index</menupath>
+            </action>
+        </reference>
         <reference name="content">
             <block type="tsg_exports/adminhtml_exports" name="tsg_exports_exports"/>
         </reference>
     </adminhtml_exports_index>
     <adminhtml_exports_edit>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>exports/index</menupath>
+            </action>
+        </reference>
         <reference name="head">
             <action method="setCanLoadExtJs">
                 <value>1</value>

@@ -11,7 +11,7 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_General
      */
     public function getTabLabel()
     {
-        return Mage::helper('tsg_exports')->__('Основное');
+        return Mage::helper('tsg_exports')->__('General');
     }
 
     /**
@@ -21,7 +21,7 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_General
      */
     public function getTabTitle()
     {
-        return Mage::helper('tsg_exports')->__('Основное');
+        return Mage::helper('tsg_exports')->__('General');
     }
 
     /**
@@ -53,10 +53,12 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_General
     {
         $helper = Mage::helper('tsg_exports');
         $model = Mage::registry('tsg_exports');
-
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset('base_fieldset', array(
-            'legend' => $helper->__('Основная информация'),
+            'legend' => $helper->__('General information'),
+        ));
+        $fieldset->addField('save_and_continue', 'hidden', array(
+            'name' => 'save_and_continue'
         ));
 
         if ($model->getId()) {
@@ -67,25 +69,31 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_General
 
         $fieldset->addField('export_name', 'text', array(
             'name' => 'export_name',
-            'label' => $helper->__('Имя Экспорта'),
+            'label' => $helper->__('Export Name'),
             'required' => true,
         ));
         $fieldset->addField('file_name', 'text', array(
             'name' => 'file_name',
-            'label' => $helper->__('Имя Файла'),
+            'label' => $helper->__('File Name'),
             'required' => true,
         ));
         $fieldset->addField('enable', 'select', array(
             'name' => 'enable',
             'values' => array('0' => 'Disable', '1' => 'Enable',),
-            'label' => $helper->__('Статус'),
+            'label' => $helper->__('Status'),
             'required' => true,
         ));
         $fieldset->addField('format', 'select', array(
             'name' => 'format',
-            'label' => $helper->__('Формат'),
+            'label' => $helper->__('Format'),
             'values' => array('yaml' => 'YAML', 'json' => 'JSON',),
             'title' => $helper->__('Format'),
+            'required' => true,
+        ));
+        $fieldset->addType('exported_file', 'Tsg_Exports_Block_Adminhtml_Exports_Render_ExportedFile');
+        $fieldset->addField('next_date', 'exported_file', array(
+            'name' => 'generated_file',
+            'label' => $helper->__('Generated file'),
             'required' => true,
         ));
         $form->setValues($model->getData());

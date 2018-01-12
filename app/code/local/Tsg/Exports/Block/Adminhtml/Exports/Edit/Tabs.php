@@ -11,14 +11,14 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tabs
         $this->setTitle(Mage::helper('tsg_exports')->__('Export Information'));
     }
 
-    protected function _prepareLayout()
+    protected function _beforeToHtml()
     {
         $this->addTab('categories', array(
-            'label' => Mage::helper('tsg_exports')->__('Категории'),
+            'label' => Mage::helper('tsg_exports')->__('Categories'),
             'url' => $this->getUrl('*/*/categories', array('_current' => true)),
             'class' => 'ajax',
         ));
-        return parent::_prepareLayout();
+        return parent::_beforeToHtml();
     }
 
 }

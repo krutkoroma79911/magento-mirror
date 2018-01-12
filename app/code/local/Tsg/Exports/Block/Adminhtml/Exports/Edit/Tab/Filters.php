@@ -11,7 +11,7 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_Filters
      */
     public function getTabLabel()
     {
-        return Mage::helper('tsg_exports')->__('Фильтры');
+        return Mage::helper('tsg_exports')->__('Filters');
     }
 
     /**
@@ -21,7 +21,7 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_Filters
      */
     public function getTabTitle()
     {
-        return Mage::helper('tsg_exports')->__('Фильтры');
+        return Mage::helper('tsg_exports')->__('Filters');
     }
 
     /**
@@ -79,43 +79,43 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_Filters
         $model = Mage::registry('tsg_exports');
         $form = new Varien_Data_Form();
         $fieldset = $form->addFieldset('base_fieldset', array(
-            'legend' => $helper->__('Фильтры'),
+            'legend' => $helper->__('Filters'),
         ));
         $fieldset->addField('qty_filter', 'text', array(
             'name' => 'qty_filter',
-            'label' => $helper->__('Фильтр по количеству'),
+            'label' => $helper->__('Filter by quantity'),
             'required' => false,
         ));
         $fieldset->addField('shares_filter', 'multiselect', array(
             'name' => 'shares_filter',
-            'label' => $helper->__('Фильтр по акциям'),
+            'label' => $helper->__('Filter by shares'),
             'required' => false,
             'values' => array(
                 '1' => array(
                     'value' => $sharesValues,
-                    'label' => 'Акции',
+                    'label' => 'Shares',
                 ),
             ),
         ));
         $fieldset->addField('markdown_filter', 'multiselect', array(
             'name' => 'markdown_filter',
-            'label' => $helper->__('Фильтр по уценке'),
+            'label' => $helper->__('Filter by markdown'),
             'required' => false,
             'values' => array(
                 '1' => array(
                     'value' => $markdownValues,
-                    'label' => 'Уценка',
+                    'label' => 'Markdown',
                 ),
             ),
         ));
         $fieldset->addField('provider_filter', 'multiselect', array(
             'name' => 'provider_filter',
-            'label' => $helper->__('Фильтр по поставщику'),
+            'label' => $helper->__('Filter by provider'),
             'required' => false,
             'values' => array(
                 '1' => array(
                     'value' => $providerValues,
-                    'label' => 'Поставщик',
+                    'label' => 'Provider',
                 ),
             ),
         ));

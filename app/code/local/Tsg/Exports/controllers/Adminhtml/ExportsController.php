@@ -8,6 +8,8 @@ class Tsg_Exports_Adminhtml_ExportsController
 
     public function indexAction()
     {
+        $this->_title($this->__('Exports'))
+            ->_title($this->__('Manage Exports'));
         $this->loadLayout();
         $this->renderLayout();
 
@@ -20,6 +22,7 @@ class Tsg_Exports_Adminhtml_ExportsController
 
     public function editAction()
     {
+        $this->_title($this->__('Exports'));
         $this->_initExport();
         $this->loadLayout();
         $this->renderLayout();
@@ -36,7 +39,7 @@ class Tsg_Exports_Adminhtml_ExportsController
                 $this->_redirect('*/*/');
             }
         }
-        $this->_title($entity->getId() ? $entity->getExportName() : $this->__('New Export'));
+        $this->_title($entity->getId() ? $this->__('Edit Export') : $this->__('New Export'));
 
         $data = Mage::getSingleton('adminhtml/session')->getExportsData(true);
         if (!empty($data)) {
@@ -87,27 +90,37 @@ class Tsg_Exports_Adminhtml_ExportsController
             } else {
                 $data['provider_filter'] = '';
             }
-
+            if (substr($data['file_name'], -4) === '.yml') {
+                $data['file_name'] = substr($data['file_name'], 0, -4);
+            } elseif (substr($data['file_name'], -5) === '.json') {
+                $data['file_name'] = substr($data['file_name'], 0, -5);
+            }
+            switch ($data['format']) {
+                case 'yaml' :
+                    $data['file_name'] = $data['file_name'] . '.yml';
+                    break;
+                case 'json' :
+                    $data['file_name'] = $data['file_name'] . '.json';
+                    break;
+            }
             $model->setData($data)->setId($this->getRequest()->getParam('id'));
+            $backToEdit = (bool)$this->getRequest()->getParam('save_and_continue');
+            $success = false;
             try {
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess($helper->__('Item was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
-                if ($this->getRequest()->getParam('back')) {
-                    $this->_redirect('*/*/edit', array('id' => $model->getId()));
-                    return;
-                }
-                $this->_redirect('*/*/');
-                return;
+                $success = true;
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
                 Mage::getSingleton('adminhtml/session')->setFormData($data);
+            }
+            if (!$success || $backToEdit) {
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-                return;
+            } else {
+                $this->_redirect('*/*/index');
             }
         }
-        Mage::getSingleton('adminhtml/session')->addError($helper->__('Unable to find item to save'));
-        $this->_redirect('*/*/');
     }
 
     /**
@@ -115,10 +128,12 @@ class Tsg_Exports_Adminhtml_ExportsController
      *
      * @param null $export
      */
-    public function generateAction($export = null)
-    {
+    public
+    function generateAction(
+        $export = null
+    ) {
         /** @var Tsg_Exports_Model_Exports $exportModel */
-        $exportModel =  Mage::getModel('tsg_exports/exports');
+        $exportModel = Mage::getModel('tsg_exports/exports');
         $massAction = true;
         if ($export === null) {
             $exportId = $this->getRequest()->getParam('id');
@@ -128,7 +143,7 @@ class Tsg_Exports_Adminhtml_ExportsController
             $massAction = false;
         }
         $exportModel->generateExport($export);
-        if($massAction === false) {
+        if ($massAction === false) {
             Mage::getSingleton('adminhtml/session')
                 ->addSuccess(Mage::helper('tsg_exports')->__('Export file created'));
             $this->_redirect('*/*/edit', array('id' => $exportId));
@@ -139,7 +154,8 @@ class Tsg_Exports_Adminhtml_ExportsController
      * Mass action for exports generate
      *
      */
-    public function massGenerateAction()
+    public
+    function massGenerateAction()
     {
         $exportIds = $this->getRequest()->getPost('mass_action');
         $exportCollection = Mage::getModel('tsg_exports/exports')->getCollection()->addIdsFilter($exportIds);
@@ -151,7 +167,8 @@ class Tsg_Exports_Adminhtml_ExportsController
         $this->_redirect('*/*/');
     }
 
-    protected function _isAllowed()
+    protected
+    function _isAllowed()
     {
         return Mage::getSingleton('admin/session')->isAllowed('admin/exports');
     }
