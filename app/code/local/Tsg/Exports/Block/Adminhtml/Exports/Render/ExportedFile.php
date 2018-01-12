@@ -16,10 +16,16 @@ class Tsg_Exports_Block_Adminhtml_Exports_Render_ExportedFile
         if (!empty($exportFileName)) {
             switch ($fileType) {
                 case 'yml' :
-                    $output = $this->getExportFileLink('yml',$exportFileName);
+                    $result = $this->getExportFileLink('yml', $exportFileName);
+                    if ($result) {
+                        $output = $result;
+                    }
                     break;
                 case 'json' :
-                    $output = $this->getExportFileLink('json',$exportFileName);
+                    $result = $this->getExportFileLink('json', $exportFileName);
+                    if ($result) {
+                        $output = $result;
+                    }
                     break;
             }
 
@@ -35,7 +41,7 @@ class Tsg_Exports_Block_Adminhtml_Exports_Render_ExportedFile
      * @param $exportFileName
      * @return string
      */
-    public function getExportFileLink($type,$exportFileName)
+    public function getExportFileLink($type, $exportFileName)
     {
         $tsgExportPath = 'tsg' . DS . 'exports';
         $baseExportDirPath = Mage::getBaseDir('media') . DS . $tsgExportPath;
@@ -44,7 +50,7 @@ class Tsg_Exports_Block_Adminhtml_Exports_Render_ExportedFile
         $exportMediaUrlPath = $baseMediaUrl . DS . $tsgExportPath . DS . $type . DS . $exportFileName;
         $link = '';
         if (file_exists($baseExportDirPath)) {
-            $link =  '<a href = ' . $exportMediaUrlPath . ' download >Save file</a>';
+            $link = '<a href = ' . $exportMediaUrlPath . ' download >Save file</a>';
         }
         return $link;
     }
