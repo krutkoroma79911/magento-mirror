@@ -51,30 +51,11 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_Filters
      */
     protected function _prepareForm()
     {
-        /** @var Mage_Eav_Model_Config $attributeModel */
-        $attributeModel = Mage::getModel('eav/config');
-        // Getting attributes
-        $sharesAttribute = $attributeModel->getAttribute('catalog_product', 'tsg_shares');
-        $markdownAttribute = $attributeModel->getAttribute('catalog_product', 'tsg_markdown');
-        $providerAttribute = $attributeModel->getAttribute('catalog_product', 'tsg_provider');
-        // Shares Options
-        $sharesAttributeOptions = $sharesAttribute->getSource()->getAllOptions(true, true);
-        $sharesValues = array();
-        foreach ($sharesAttributeOptions as $option) {
-            $sharesValues[] = ['value' => $option['value'],'label' => $option['label']];
-        }
-        // Markdown Options
-        $markdownAttributeOptions = $markdownAttribute->getSource()->getAllOptions(true, true);
-        $markdownValues = array();
-        foreach ($markdownAttributeOptions as $option) {
-            $markdownValues[] = ['value' => $option['value'],'label' => $option['label']];
-        }
-        // Provider Options
-        $providerAttributeOptions = $providerAttribute->getSource()->getAllOptions(true, true);
-        $providerValues = array();
-        foreach ($providerAttributeOptions as $option) {
-            $providerValues[] = ['value' => $option['value'],'label' => $option['label']];
-        }
+        // Getting attribute values
+        $sharesValues = $this->getAttributeOption('catalog_product', 'tsg_shares');
+        $markdownValues = $this->getAttributeOption('catalog_product', 'tsg_markdown');
+        $providerValues = $this->getAttributeOption('catalog_product', 'tsg_provider');
+
         $helper = Mage::helper('tsg_exports');
         $model = Mage::registry('tsg_exports');
         $form = new Varien_Data_Form();
@@ -123,5 +104,26 @@ class Tsg_Exports_Block_Adminhtml_Exports_Edit_Tab_Filters
         $this->setForm($form);
 
         return parent::_prepareForm();
+    }
+
+    /**
+     * Returning array of attribute options
+     *
+     * @param $entityType
+     * @param $attributeCode
+     * @return array
+     */
+    public function getAttributeOption($entityType, $attributeCode)
+    {
+        /** @var Mage_Eav_Model_Config $attributeModel */
+        $attributeModel = Mage::getModel('eav/config');
+        $attribute = $attributeModel->getAttribute($entityType, $attributeCode);
+        // Getting Options
+        $attributeOptions = $attribute->getSource()->getAllOptions(true, true);
+        $attributeValues = array();
+        foreach ($attributeOptions as $option) {
+            $attributeValues[] = ['value' => $option['value'], 'label' => $option['label']];
+        }
+        return $attributeValues;
     }
 }

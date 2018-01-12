@@ -3,6 +3,10 @@
 class Tsg_Exports_Block_Adminhtml_Exports_Render_Attribute
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
+    /**
+     * @param Varien_Object $row
+     * @return string
+     */
     public function render(Varien_Object $row)
     {
         $output = '';
@@ -11,10 +15,10 @@ class Tsg_Exports_Block_Adminhtml_Exports_Render_Attribute
         if (!empty($value)) {
             $values = explode(',', $value);
             $attributeModel = Mage::getModel('eav/config');
-            $sharesAttribute = $attributeModel->getAttribute('catalog_product', $column->getId());
-            if ($sharesAttribute->usesSource()) {
+            $attribute = $attributeModel->getAttribute('catalog_product', $column->getId());
+            if ($attribute->usesSource()) {
                 foreach ($values as $value) {
-                    $output .= $sharesAttribute->getSource()->getOptionText($value) . ', ';
+                    $output .= $attribute->getSource()->getOptionText($value) . ', ';
                 }
                 $output = trim($output, ', ');
             }
