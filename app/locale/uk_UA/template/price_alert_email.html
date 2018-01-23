@@ -1,0 +1,10 @@
+{{template config_path="design/email/header"}}
+<div>
+    <h1 align="center">Привіт Гість</h1>
+    <div>
+    <span>Ви були підписані на відстежування ціни товару {{var product_name}}, Ціна змінилась з  {{var price}} {{var currency}} на {{var product_price}}
+        {{var currency}}, будь ласка відвідайте <a href={{var product_url}} target="_blank">Сторінку продукту</a>
+    </span>
+    </div>
+</div>
+{{template config_path="design/email/footer"}}

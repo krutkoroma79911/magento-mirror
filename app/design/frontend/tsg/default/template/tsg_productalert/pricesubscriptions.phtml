@@ -1,0 +1,83 @@
+<?php
+$priceConfig = Mage::getStoreConfig('tsg_productalert/tsg_productgroup/tsg_email_price_template',
+    Mage::app()->getStore());
+$customerSession = Mage::getSingleton('customer/session');
+$customerLogin = $customerSession->isLoggedIn();
+if (!$customerLogin) {
+    $priceConfig = Mage::getStoreConfig('tsg_productalert/tsg_productgroup/tsg_pricealert', Mage::app()->getStore());
+    if ($priceConfig) {
+        $ajaxCheckMailUrl = Mage::getUrl('tsg_productalert/price/checkmail');
+        $ajaxSavePriceSubscription = Mage::getUrl('tsg_productalert/price/savepricesubscription');
+        $onclickFunction = 'price_popup_div_show()';
+        $product = Mage::registry('current_product');
+        $websiteId = Mage::app()->getWebsite()->getId();
+        ?>
+        <div class="tsg_popup" id="price_popup_block">
+            <div class="popup_contact" id="tsg_price_popup_contact">
+                <form class="tsg_popup_form" action=''
+                      id="tsg_price_popup_form" method="post" name="tsg_price_popup_form">
+                    <img class="image_close" id="close"
+                         src=<?php echo Mage::getBaseUrl('media') . DS . 'tsg/popup/close.png'; ?> onclick ="
+                price_popup_div_hide()">
+                    <h2 class="popup_h2">Type your email</h2>
+                    <hr class="tsg_hr">
+                    <input class="popup_email" id="price_email" name="price_email" placeholder="Email" type="text">
+                    <a class="popup_submit" href="javascript:%20validatePriceForm()" id="submit">Send</a>
+                </form>
+            </div>
+        </div>
+        <h1>Click to Subscribe for price changes notifications</h1>
+        <button class="tsg_popup_button" onclick=<?php echo $onclickFunction; ?>>Subscribe</button>
+        <script type="text/javascript">
+
+            // Form validation
+            function validatePriceForm() {
+                var email = document.getElementById('price_email').value;
+                if (email.value === '') {
+                    alert("Fill Email field !");
+                } else if (validateEmail(email)) {
+                    callPriceController(email);
+                } else {
+                    alert('Wrong email');
+                }
+            }
+
+            function callPriceController(email) {
+                var checkMailUrl = '<?php echo $ajaxCheckMailUrl ?>';
+                new Ajax.Request(checkMailUrl, {
+                    method: 'Post',
+                    parameters: {'email': email, 'productId':<?php echo $product->getId();?>},
+                    onComplete: function (transport) {
+                        var result = transport.responseText;
+                        if (result) {
+                            savePriceSubscription(email);
+                        } else {
+                            alert('This email is already subscribed on this product price!');
+                        }
+                    }
+                })
+            }
+
+            /**
+             * Saving price subscription if email is valid
+             *
+             * @param email
+             */
+            function savePriceSubscription(email) {
+                var savePriceSubscriptionUrl = '<?php echo $ajaxSavePriceSubscription ?>';
+                new Ajax.Request(savePriceSubscriptionUrl, {
+                    method: 'Post',
+                    parameters: {
+                        'customer_email': email,
+                        'product_id':<?php echo $product->getId(); ?>,
+                        'price':<?php echo $product->getPrice();?>,
+                        'website_id':<?php echo $websiteId; ?>
+                    },
+                    onComplete: function (transport) {
+                        window.location.reload();
+                    }
+                })
+            }
+        </script>
+    <?php }
+} ?>

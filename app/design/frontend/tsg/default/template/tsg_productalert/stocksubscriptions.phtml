@@ -1,0 +1,83 @@
+<?php
+$customerSession = Mage::getSingleton('customer/session');
+$customerLogin = $customerSession->isLoggedIn();
+if (!$customerLogin) {
+    $stockConfig = Mage::getStoreConfig('tsg_productalert/tsg_productgroup/tsg_stockalert', Mage::app()->getStore());
+    if ($stockConfig) {
+        $product = Mage::registry('current_product');
+        $productStock = $product->getIsInStock();
+        if (!$productStock) {
+            $ajaxCheckMailUrl = Mage::getUrl('tsg_productalert/stock/checkmail');
+            $ajaxSavePriceSubscription = Mage::getUrl('tsg_productalert/stock/savestocksubscription');
+            $onclickFunction = 'stock_popup_div_show()';
+            $websiteId = Mage::app()->getWebsite()->getId();
+            ?>
+            <div class="tsg_popup" id="stock_popup_block">
+                <div class="popup_contact" id="tsg_stock_popup_contact">
+                    <form class="tsg_popup_form" action=''
+                          id="tsg_stock_popup_form" method="post" name="tsg_stock_popup_form">
+                        <img class="image_close" id="close"
+                             src=<?php echo Mage::getBaseUrl('media') . DS . 'tsg/popup/close.png'; ?> onclick ="
+                    stock_popup_div_hide()">
+                        <h2 class="popup_h2">Type your email</h2>
+                        <hr class="tsg_hr">
+                        <input class="popup_email" id="stock_email" name="stock_email" placeholder="Email" type="text">
+                        <a class="popup_submit" href="javascript:%20validateStockForm()" id="submit">Send</a>
+                    </form>
+                </div>
+            </div>
+            <h1>Click to Subscribe for stock changes notifications</h1>
+            <button class="tsg_popup_button" onclick=<?php echo $onclickFunction; ?>>Subscribe</button>
+            <script type="text/javascript">
+                // Form validation
+                function validateStockForm() {
+                    var email = document.getElementById('stock_email').value;
+                    if (email.value === '') {
+                        alert("Fill Email field !");
+                    } else if (validateEmail(email)) {
+                        callStockController(email);
+                    } else {
+                        alert('Wrong email');
+                    }
+                }
+
+                function callStockController(email) {
+                    var checkMailUrl = '<?php echo $ajaxCheckMailUrl ?>';
+                    new Ajax.Request(checkMailUrl, {
+                        method: 'Post',
+                        parameters: {'email': email, 'productId':<?php echo $product->getId();?>},
+                        onComplete: function (transport) {
+                            var result = transport.responseText;
+                            if (result) {
+                                saveStockSubscription(email);
+                            } else {
+                                alert('This email is already subscribed on this product stock!');
+                            }
+                        }
+                    })
+                }
+
+                /**
+                 * Saving price subscription if email is valid
+                 *
+                 * @param email
+                 */
+                function saveStockSubscription(email) {
+                    var saveStockSubscriptionUrl = '<?php echo $ajaxSavePriceSubscription ?>';
+                    new Ajax.Request(saveStockSubscriptionUrl, {
+                        method: 'Post',
+                        parameters: {
+                            'customer_email': email,
+                            'product_id':<?php echo $product->getId(); ?>,
+                            'stock':<?php echo $productStock;?>,
+                            'website_id':<?php echo $websiteId; ?>
+                        },
+                        onComplete: function (transport) {
+                            window.location.reload();
+                        }
+                    })
+                }
+            </script>
+        <?php }
+    }
+} ?>

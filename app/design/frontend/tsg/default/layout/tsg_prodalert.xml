@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<layout version="0.0.1">
+    <catalog_product_view translate="label">
+        <reference name="content">
+            <block type="tsg_productalert/price_link" name="price"
+                   template="tsg_productalert/pricesubscriptions.phtml"/>
+            <block type="tsg_productalert/stock_link" name="stock"
+                   template="tsg_productalert/stocksubscriptions.phtml"/>
+        </reference>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/pricesubscriptions.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/stocksubscriptions.js</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/tsg_alert.js</name>
+            </action>
+        </reference>
+    </catalog_product_view>
+</layout>
