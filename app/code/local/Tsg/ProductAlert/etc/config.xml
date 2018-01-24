@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<config>
+
+    <modules>
+        <Tsg_ProductAlert>
+            <version>0.0.1</version>
+        </Tsg_ProductAlert>
+    </modules>
+
+    <frontend>
+        <layout>
+            <updates>
+                <tsg_productalert>
+                    <file>tsg_prodalert.xml</file>
+                </tsg_productalert>
+            </updates>
+        </layout>
+        <routers>
+            <tsg_productalert>
+                <use>standard</use>
+                <args>
+                    <module>Tsg_ProductAlert</module>
+                    <frontName>tsg_productalert</frontName>
+                </args>
+            </tsg_productalert>
+        </routers>
+    </frontend>
+
+    <global>
+        <helpers>
+            <tsg_productalert>
+                <class>Tsg_ProductAlert_Helper</class>
+            </tsg_productalert>
+        </helpers>
+        <blocks>
+            <tsg_productalert>
+                <class>Tsg_ProductAlert_Block</class>
+            </tsg_productalert>
+        </blocks>
+        <models>
+            <tsg_productalert>
+                <class>Tsg_ProductAlert_Model</class>
+                <resourceModel>tsg_productalert_resource</resourceModel>
+            </tsg_productalert>
+            <tsg_productalert_resource>
+                <class>Tsg_ProductAlert_Model_Resource</class>
+                <entities>
+                    <price>
+                        <table>tsg_productalert_price</table>
+                    </price>
+                    <stock>
+                        <table>tsg_productalert_stock</table>
+                    </stock>
+                </entities>
+            </tsg_productalert_resource>
+        </models>
+        <resources>
+            <tsg_productalert_setup>
+                <setup>
+                    <module>Tsg_ProductAlert</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+            </tsg_productalert_setup>
+        </resources>
+        <template>
+            <email>
+                <tsg_productalert_tsg_productgroup_tsg_email_price_template translate="label" module="tsg_productalert">
+                    <label>Tsg Price Email Template</label>
+                    <file>price_alert_email.html</file>
+                    <type>html</type>
+                </tsg_productalert_tsg_productgroup_tsg_email_price_template>
+                <tsg_productalert_tsg_productgroup_tsg_email_stock_template translate="label" module="tsg_productalert">
+                    <label>Tsg Stock Email Template</label>
+                    <file>stock_alert_email.html</file>
+                    <type>html</type>
+                </tsg_productalert_tsg_productgroup_tsg_email_stock_template>
+            </email>
+        </template>
+    </global>
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <tsg_productalert>
+                                            <title>Tsg Product Alert</title>
+                                        </tsg_productalert>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <tsg_productalert_send>
+                <run>
+                    <model>tsg_productalert/observer::sendNotificationsEmail</model>
+                </run>
+            </tsg_productalert_send>
+        </jobs>
+    </crontab>
+</config>
