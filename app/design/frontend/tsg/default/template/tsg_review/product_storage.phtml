@@ -1,0 +1,33 @@
+<?php
+$currentProduct = Mage::registry('current_product');
+$size = Mage::getStoreConfig('catalog/recently_products/viewed_count');
+?>
+<script>
+    var localProducts = getProductsStorage();
+    var productId = '<?php echo $currentProduct->getId();?>';
+    var product = {
+            "id" : productId,
+            "url": '<?php echo $this->getProductUrl($currentProduct)?>',
+            "img": '<?php echo Mage::helper('catalog/image')->init($currentProduct, 'thumbnail')->resize(50,
+                50)->setWatermarkSize('30x10'); ?>',
+            "name": '<?php echo $currentProduct->getName(); ?>'
+        };
+    if (localProducts) {
+        var pageSize = <?php echo $size?>;
+        var products = localProducts['products'];
+        var productExist = productExists(productId, products);
+        // if there is no product in local storage, set new product to storage
+        if (!productExist) {
+            var productsCount = products.length;
+            if (productsCount >= pageSize) {
+                localProducts['products'] = products.slice(0, pageSize-1);
+            }
+            localProducts['products'].unshift(product);
+        }
+    } else {
+        var currentTime = new Date().getTime();
+        localProducts = {'products': [],'ttl': currentTime};
+        localProducts['products'].unshift(product);
+    }
+    setProductsToStorage(localProducts);
+</script>

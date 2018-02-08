@@ -1,0 +1,25 @@
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/tsg_review.js</name>
+            </action>
+        </reference>
+        <reference name="right">
+            <remove name="right.reports.product.viewed"/>
+            <block type="tsg_review/product_ajax" before="right.permanent.callout" name="tsg.ajax.view"
+                   template="tsg_review/product_ajax.phtml"/>
+        </reference>
+        <catalog_category_layered_nochildren translate="label">
+            <label>Catalog Category (Without Subcategories)</label>
+            <remove name="left.reports.product.viewed"/>
+        </catalog_category_layered_nochildren>
+    </default>
+    <catalog_product_view>
+        <reference name="content">
+            <block type="tsg_review/product_storage" name="tsg.product.storage"
+                   template="tsg_review/product_storage.phtml"/>
+        </reference>
+    </catalog_product_view>
+</layout>
