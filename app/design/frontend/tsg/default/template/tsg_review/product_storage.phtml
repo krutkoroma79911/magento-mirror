@@ -3,7 +3,8 @@ $currentProduct = Mage::registry('current_product');
 $size = Mage::getStoreConfig('catalog/recently_products/viewed_count');
 ?>
 <script>
-    var localProducts = getProductsStorage();
+    var viewedClass = new recentlyViewed();
+    var localProducts = viewedClass.getProductsStorage();
     var productId = '<?php echo $currentProduct->getId();?>';
     var product = {
             "id" : productId,
@@ -15,7 +16,7 @@ $size = Mage::getStoreConfig('catalog/recently_products/viewed_count');
     if (localProducts) {
         var pageSize = <?php echo $size?>;
         var products = localProducts['products'];
-        var productExist = productExists(productId, products);
+        var productExist = viewedClass.productExists(productId, products);
         // if there is no product in local storage, set new product to storage
         if (!productExist) {
             var productsCount = products.length;
@@ -29,5 +30,5 @@ $size = Mage::getStoreConfig('catalog/recently_products/viewed_count');
         localProducts = {'products': [],'ttl': currentTime};
         localProducts['products'].unshift(product);
     }
-    setProductsToStorage(localProducts);
+    viewedClass.setProductsToStorage(localProducts);
 </script>

@@ -1,20 +1,20 @@
 <?php
 $ajaxGetProductsUrl = Mage::getUrl('tsg_review/ajax/getProducts');
 $cookieUrl = Mage::getUrl('tsg_review/ajax/deleteCookie');
-
-$skin = Mage::getDesign()->getSkinUrl() . DS . 'js' . DS . 'tsg_review' . DS . 'recenlty_viewed.ejs';
 ?>
 <script type="text/javascript">
+    var viewedClass = new recentlyViewed();
     var cookies = document.cookie.indexOf('loggin');
     if(cookies > 0) {
         debugger;
         localStorage.clear();
-        deleteLogginCookie('<?php echo $cookieUrl?>');
+        viewedClass.deleteLogginCookie('<?php echo $cookieUrl?>');
     }
-    var products = getProductsStorage();
+
+    var products = viewedClass.getProductsStorage();
     var getProductsUrl = '<?php echo $ajaxGetProductsUrl ?>';
     if (!products) {
-        getProductsToLocalStorage(getProductsUrl);
+        viewedClass.getProductsToLocalStorage(getProductsUrl);
     } else {
         var currentTime = new Date().getTime();
         var createdBlockTime = products['ttl'];
@@ -22,9 +22,9 @@ $skin = Mage::getDesign()->getSkinUrl() . DS . 'js' . DS . 'tsg_review' . DS . '
         var hour = ( difference / (1000 * 60 * 60)).toFixed(1);
         if ( hour >= 1) {
             localStorage.removeItem('productObject');
-            getProductsToLocalStorage(getProductsUrl);
+            viewedClass.getProductsToLocalStorage(getProductsUrl);
         } else {
-            renderViewBlock();
+            viewedClass.renderViewBlock();
         }
     }
 </script>
